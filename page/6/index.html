@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>iyua</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="my blog">
+<meta property="og:type" content="website">
+<meta property="og:title" content="iyua">
+<meta property="og:url" content="http://example.com/page/6/index.html">
+<meta property="og:site_name" content="iyua">
+<meta property="og:description" content="my blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="iyua">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="iyua" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="../../cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+
+  
+  
+<link rel="stylesheet" href="../../css/style.css">
+
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+    
+    
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: true,
+          isPost: false,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.png" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/"></a></h1>
+        </hgroup>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="搜索一下" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0) 
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';                
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                } 
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="../../index.html">主页</a></li>
+                        
+                            <li><a  href="../../archives/">所有文章</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl luogu"  target="_blank" href="../../https:/www.luogu.com.cn/user/321875" title="luogu">luogu</a>
+                            
+                                <a class="fl codeforces"  target="_blank" href="../../http:/codeforces.com/profile/iyua" title="codeforces">codeforces</a>
+                            
+                                <a class="fl nowcoder"  target="_blank" href="../../https:/ac.nowcoder.com/acm/contest/profile/118182697" title="nowcoder">nowcoder</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="../../tags/DP/" style="font-size: 12px;">DP</a> <a href="../../tags/Traning/" style="font-size: 10px;">Traning</a> <a href="../../tags/%E5%8D%9A%E5%BC%88/" style="font-size: 10px;">博弈</a> <a href="../../tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 18px;">图论</a> <a href="../../tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 10px;">字符串</a> <a href="../../tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/" style="font-size: 10px;">并查集</a> <a href="../../tags/%E6%95%B0%E5%AD%A6/" style="font-size: 10px;">数学</a> <a href="../../tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 20px;">数据结构</a> <a href="../../tags/%E6%9D%82%E9%A1%B9/" style="font-size: 14px;">杂项</a> <a href="../../tags/%E6%AF%94%E8%B5%9B/" style="font-size: 16px;">比赛</a> <a href="../../tags/%E8%84%91%E5%AD%90%E9%A2%98/" style="font-size: 10px;">脑子题</a>
+                    </div>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                
+                    <div id="js-aboutme">2108507537@qq.com</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页"></a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页"></a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="../../index.html">主页</a></li>
+                
+                    <li><a href="../../archives/">所有文章</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="luogu" target="_blank" href="../../https:/www.luogu.com.cn/user/321875" title="luogu">luogu</a>
+                    
+                        <a class="codeforces" target="_blank" href="../../http:/codeforces.com/profile/iyua" title="codeforces">codeforces</a>
+                    
+                        <a class="nowcoder" target="_blank" href="../../https:/ac.nowcoder.com/acm/contest/profile/118182697" title="nowcoder">nowcoder</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap">
+  
+    <article id="post-板刷codeforces数据结构" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="../../2020/12/26/%E6%9D%BF%E5%88%B7codeforces%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="article-date">
+      <time datetime="2020-12-25T16:01:42.000Z" itemprop="datePublished">2020-12-26</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="../../2020/12/26/%E6%9D%BF%E5%88%B7codeforces%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">板刷codeforces数据结构</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset?order=BY_SOLVED_DESC&tags=data+structures,1800-">题单列表</a></p>
+<p>此篇长期更新这个题单的题解  仅仅放解题思路  如需代码可自行去提交列表搜索  iyua  来获取<br><a target="_blank" rel="noopener" href="https://codeforces.ml/profile/iyua">iyua</a></p>
+<p><del>————————-</del><br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/380/C">C. Sereja and Brackets</a><br>长度 $ 1e6 $ 的括号序列，每次查询询问一个区间合法的匹配数<br>考虑线段树维护区间合并，每个节点维护三个值 <strong>此区间多余的左括号</strong> <strong>此区间多余的右括号</strong> <strong>此区间已匹配的括号数</strong><br>那么合并区间就是  左匹配 + 右匹配 + min(左多余左, 右多余右),  同时记得用新产生的匹配数去更新左右多余的括号数目<br>对于查询操作，<code>query</code>操作应当写成返回值为$ node $类型，方便处理不在同一个小区间的匹配的情况<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/86/D">D. Powerful array</a><br>给出长度 $ 2e5 $ 的序列， 每次询问求一个区间内  每个数乘以这个数出现的次数  的和为多少<br>莫队入门题，直接上分块就可以了，注意 add 和 del 函数的书写<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/577/B">B. Modulo Sum</a><br>长度为 $ n $ 的序列，求问是否有一个子段的和是 $ m $的倍数<br>为什么混入一个DP..<br>首先根据鸽笼定理， $ n &gt; m $ 必定可以， 小于的情况直接DP就可以了<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/5/C">C. Longest Regular Bracket Sequence</a><br>给出一个括号序列，求问最长连续成功匹配的长度是多少，并输出方案数…注意特判无解的情况<br>很简单，先扫一遍给每个点标记下能否成功匹配，然后用类似于最大子段和的思想就可以啦<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/1400/D">D. Zigzags</a><br>给出长度为$ 3e3 $的序列，求问 满足 $ (i &lt; j &lt;  k &lt; l) $ 且 $ a[i] = a[k], a[j] = a[l] $ 这样的组合的数目<br>我按照逆序对的思想做的，对于每个点，找到它后面且权值与它相等的点，暴力连成一个双元组，那么这个题就转换成了对于一个双元组(a, b)，满足 $ a_i &lt; b_i $, $ b_i &lt; a_j &lt; b_j $ 这样的双元组的数目，考虑逆序对的思想，用树状数组维护，但是有 (1, 4),(1, 5) 这样特殊的情况，所以我们不能靠常规的add函数来维护树状数组，我们应当保证当前的$a_j$严格大于前面的$a_i$时，才能 放入树状数组内，所以加个小技巧考虑下这种case 就可以了<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/1359/D">D. Yet Another Yet Another Task</a><br>给出一个长度为 $ 1e5 $ 的序列， 找出一个子区间使得，这个子区间的和减去这个子区间最大值  所得到的结果最大，每个数权值$ a_i $ 满足 $ -30 &lt;= a_i &lt;= 30 $<br>考虑最大子段和的思想，由于这题权值范围很小，可以暴力枚举最大值，然后寻找这个最大值范围内的最大子段和<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/459/D">D. Pashmak and Parmida’s problem</a><br>简单逆序对，给出一种权值定义方式，然后找出逆序对的个数<br>先预处理出每个数左边和右边有多少个数与它相等(可以用离散化来求，map会不会T不清楚,然后建立一个树状数组就可以了<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/1335/E2">E2. Three Blocks Palindrome (hard version)</a><br>给出长度为$ 2e5 $ 的序列，然后定义了三段回文的含义， 求最长回文长度<br>由于权值小于200,所以我们可以存下每个权值存在的所有下标，然后暴力枚举两边的权值以及长度，对于中间的长度， 暴力枚举权值并用二分确认个数（注意清空时的复杂度)<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/1354/D">D. Multiset</a><br>给出一个长度为 $ 1e6 $的序列，之后尽情若干次操作，要么插入一个数，要么删除第 $k$ 大的数，<br>插入一个数考虑权值线段树， 第$k$大考虑主席树，但是这题空间限制很紧，所以采用树状数组实现权值线段树，同时由于是整体第$k$大，不是区间第$k$大，所以可以用二分加树状数组来实现<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/271/D">D. Good Substrings</a><br>长度为1500的字符串，给出好串的定义，求问多少个本质不同的好串且子串<br>用前缀和的思想可以 $O(1)$ 判断是否为好串，关于去重，由于长度不大，可以采用哈希+set或者用字典树来去重<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/706/D">D. Vasiliy’s Multiset</a><br>插入，删除，查询异或最大<br>01字典树板子题…<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/220/B">B. Little Elephant and Array</a><br>长度1e5的序列，每次查询一个区间满足权值等于他出现个数的数的个数<br>考虑莫队，维护一下当前区间每个数出现的个数就可以了，且不需要离散化，因为大于n的数一定不满足条件（就算全是序列内全是这个数，个数也不够）直接跳过就可以了<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/547/B">B. Mike and Feet</a><br>对一个长度 $ 2e5 $的序列，找出1到n所有长度的子序列的最小值最大为多少<br><del>暴力</del>，考虑单调栈优化，找出每个数左边和右边第一个小于它的数的地方，假设为$l$和$r$，那么这个点的贡献就是所有不超过$r-l-1$这个长度的答案都可以用目前这个点的大小来更新一下最大值，建立个权值线段树维护区间最大值就可以了<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/61/E">E. Enemy is weak</a><br>给出长度为$ 1e6 $的序列，找出所有的$(i &lt; j &lt; k)$, 且$( a_i &gt; a_j &gt; a_k)$，这样的组合数目<br><del>看给了5s，企图分块被卡了</del>  预处理出每个数左边多少个数大于他，右边多少个小于它，然后乘起来就是它的贡献，累和起来就可以了，预处理的方法就是用逆序对，树状数组<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/600/E">E. Lomsat gelral</a><br>找出每个节点，它子树中出现次数最多的颜色乘于它的次数<br>树上启发式板子题，注意树剖的写法，以及容斥时避开重儿子<br><a target="_blank" rel="noopener" href="https://codeforces.ml/problemset/problem/519/D">D. A and B and Interesting Substrings</a><br>给出一个$1e5$字符串，找出满足起始和结尾相等，且中间权值之和为0的子串的数目<br>先预处理出前缀和，然后记录下每个字母出现在哪些下标中，对于同种字母，就是找出两者sum差值为这个字母的权值的点对的个数，可以用 $map$ 来记录</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="../5/">&amp;laquo; Prev</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../4/">4</a><a class="page-number" href="../5/">5</a><span class="page-number current">6</span>
+    </nav>
+  
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2021 iyua
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a><a href="https://github.com/maochunguang" target="_blank">Blog</a> by tommy
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >极客到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+
+<script src="../../js/main.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'xxxxx', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>偏序关系 &amp; CDQ分治 | iyua</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="二维偏序逆序对问题对于一个长度为 $ n $ 的序列，找出所有的点对 $(i, j) $ 满足 $(i &lt; j)$ 同时 $(a_i &gt; a_j)$ 的点对的数目solution : 很容易想到，对于每个数的贡献，就是它前面大于他的数的个数，那么我们可以采用权值线段树的思想，不断查询大于他的权值的区间的和，不断更新来算贡献，对于这种单点查询，区间更新，我们考虑树状数组, 按照下标从小到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="偏序关系 &amp; CDQ分治">
+<meta property="og:url" content="http://example.com/2020/12/26/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB-CDQ%E5%88%86%E6%B2%BB/index.html">
+<meta property="og:site_name" content="iyua">
+<meta property="og:description" content="二维偏序逆序对问题对于一个长度为 $ n $ 的序列，找出所有的点对 $(i, j) $ 满足 $(i &lt; j)$ 同时 $(a_i &gt; a_j)$ 的点对的数目solution : 很容易想到，对于每个数的贡献，就是它前面大于他的数的个数，那么我们可以采用权值线段树的思想，不断查询大于他的权值的区间的和，不断更新来算贡献，对于这种单点查询，区间更新，我们考虑树状数组, 按照下标从小到">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-12-25T16:04:30.000Z">
+<meta property="article:modified_time" content="2021-01-21T09:13:49.619Z">
+<meta property="article:author" content="iyua">
+<meta property="article:tag" content="杂项">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="iyua" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="../../../../cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+
+  
+  
+<link rel="stylesheet" href="../../../../css/style.css">
+
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.png" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/"></a></h1>
+        </hgroup>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="搜索一下" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0) 
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';                
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                } 
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="../../../../index.html">主页</a></li>
+                        
+                            <li><a  href="../../../../archives/">所有文章</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl luogu"  target="_blank" href="../../../../https:/www.luogu.com.cn/user/321875" title="luogu">luogu</a>
+                            
+                                <a class="fl codeforces"  target="_blank" href="../../../../http:/codeforces.com/profile/iyua" title="codeforces">codeforces</a>
+                            
+                                <a class="fl nowcoder"  target="_blank" href="../../../../https:/ac.nowcoder.com/acm/contest/profile/118182697" title="nowcoder">nowcoder</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="../../../../tags/DP/" style="font-size: 12px;">DP</a> <a href="../../../../tags/Traning/" style="font-size: 10px;">Traning</a> <a href="../../../../tags/%E5%8D%9A%E5%BC%88/" style="font-size: 10px;">博弈</a> <a href="../../../../tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 18px;">图论</a> <a href="../../../../tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 10px;">字符串</a> <a href="../../../../tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/" style="font-size: 10px;">并查集</a> <a href="../../../../tags/%E6%95%B0%E5%AD%A6/" style="font-size: 10px;">数学</a> <a href="../../../../tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 20px;">数据结构</a> <a href="../../../../tags/%E6%9D%82%E9%A1%B9/" style="font-size: 14px;">杂项</a> <a href="../../../../tags/%E6%AF%94%E8%B5%9B/" style="font-size: 16px;">比赛</a> <a href="../../../../tags/%E8%84%91%E5%AD%90%E9%A2%98/" style="font-size: 10px;">脑子题</a>
+                    </div>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                
+                    <div id="js-aboutme">2108507537@qq.com</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页"></a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页"></a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="../../../../index.html">主页</a></li>
+                
+                    <li><a href="../../../../archives/">所有文章</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="luogu" target="_blank" href="../../../../https:/www.luogu.com.cn/user/321875" title="luogu">luogu</a>
+                    
+                        <a class="codeforces" target="_blank" href="../../../../http:/codeforces.com/profile/iyua" title="codeforces">codeforces</a>
+                    
+                        <a class="nowcoder" target="_blank" href="../../../../https:/ac.nowcoder.com/acm/contest/profile/118182697" title="nowcoder">nowcoder</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-偏序关系-CDQ分治" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="" class="article-date">
+      <time datetime="2020-12-25T16:04:30.000Z" itemprop="datePublished">2020-12-26</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      偏序关系 &amp; CDQ分治
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h6 id="二维偏序"><a href="#二维偏序" class="headerlink" title="二维偏序"></a>二维偏序</h6><p><strong>逆序对</strong>问题<br>对于一个长度为 $ n $ 的序列，找出所有的点对 $(i, j) $ 满足 $(i &lt; j)$ 同时 $(a_i &gt; a_j)$ 的点对的数目<br><strong>solution :</strong></p>
+<p>很容易想到，对于每个数的贡献，就是它前面大于他的数的个数，那么我们可以采用权值线段树的思想，不断查询大于他的权值的区间的和，不断更新来算贡献，对于这种单点查询，区间更新，我们考虑树状数组, 按照下标从小到大遍历，每个点的贡献就是  <code>query(n) - query(a[i])</code> 然后对于每个点，将这个点的权值 $a_i$ 存入树状数组中</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 核心代码</span></span><br><span class="line"><span class="comment">// 简易起见假设 1 &lt;= a[i] &lt;= n   看情况是否需要离散化</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lowbit(x)	(x &amp; (-x))</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e6</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> n, arr[maxn], Tree[maxn];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(x &lt;= n) &#123;</span><br><span class="line">		++ Tree[x];</span><br><span class="line">		x += lowbit(x);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">query</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		res += Tree[x];</span><br><span class="line">		x -= lowbit(x);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, arr + i);</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">		res += query(n) - query(a[i]);</span><br><span class="line">		add(a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, res);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://codeforces.ml/contest/459/problem/D">一道变式题</a><br>仔细想想，这其实是个二维偏序，对于每个位置的数有两种值，一个是$ L $ 一个是 $R $，那就是对于每个位置前面找出$ L $大于这个位置的 $R$的点对的数目，但是更新这个点权值到树状数组时应当用 $ L $来更新，可以利用 $ map $或者离散化后权值桶来处理出 $ L $ 和$ R $数组，之后直接跑一个逆序对就可以了</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span>  LL;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e6</span> + <span class="number">7</span>;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; V;</span><br><span class="line"><span class="keyword">int</span> n, arr[maxn];</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lowbit(x)   (x &amp; (-x))</span></span><br><span class="line">LL Tree[maxn];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(x &lt;= n) &#123;</span><br><span class="line">        ++ Tree[x];</span><br><span class="line">        x += lowbit(x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> LL <span class="title">query</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    LL res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x) &#123;</span><br><span class="line">        res += Tree[x];</span><br><span class="line">        x -= lowbit(x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> cnt1[maxn], cnt2[maxn], L[maxn], R[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    V.resize(n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, arr + i);</span><br><span class="line">        V[i - <span class="number">1</span>] = arr[i];</span><br><span class="line">    &#125;</span><br><span class="line">    sort(V.begin(), V.end());</span><br><span class="line">    V.resize(unique(V.begin(), V.end()) - V.begin());</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">int</span> id = lower_bound(V.begin(), V.end(), arr[i]) - V.begin() + <span class="number">1</span>;</span><br><span class="line">        ++ cnt1[id];</span><br><span class="line">        L[i] = cnt1[id];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n; i &gt;= <span class="number">1</span>; -- i) &#123;</span><br><span class="line">        <span class="keyword">int</span> id = lower_bound(V.begin(), V.end(), arr[i]) - V.begin() + <span class="number">1</span>;</span><br><span class="line">        ++ cnt2[id];</span><br><span class="line">        R[i] = cnt2[id];</span><br><span class="line">    &#125;</span><br><span class="line">    LL res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">int</span> id = lower_bound(V.begin(), V.end(), arr[i]) - V.begin() + <span class="number">1</span>;</span><br><span class="line">        res += query(n) - query(R[i]);</span><br><span class="line">        add(L[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, res);</span><br><span class="line">    <span class="meta">#<span class="meta-keyword">ifdef</span> iyua</span></span><br><span class="line">        system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">    <span class="meta">#<span class="meta-keyword">endif</span> </span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="三维偏序"><a href="#三维偏序" class="headerlink" title="三维偏序"></a>三维偏序</h6><p><strong>陌上花开</strong><br>这次增加到了三维，经典模板题<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3810">陌上花开</a></p>
+<p>![](E:\iyua\source_posts\偏序关系-CDQ分治\屏幕截图 2020-12-22 230744.png)</p>
+<p>我们就不能采用上述方法做了，$ IOI $ 选手 $ cdq $ 率先引入了 $ CDQ $分治这一思想来解决这些问题，我们先按照第一关键字排序，然后不断递归分治，从小区间合并为大区间，把左区间的贡献不断累积到右区间上面，对于递归过程中，我们能保证左区间相对于右区间第一关键字一定符合要求，之后二三关键字就优化成了二维偏序，一般采用树状数组来实现</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设 1 &lt;= 权值 &lt;= n</span></span><br><span class="line"><span class="comment">// 此代码非本题ac代码  仅写出了三维偏序的思想</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lowbit(x)	(x &amp; (-x))</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e6</span> + <span class="number">7</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> a, b, c, id;</span><br><span class="line">&#125;Q[maxn];</span><br><span class="line"><span class="keyword">int</span> Tree[maxn], F[maxn];<span class="comment">// F[i] 代表 i的贡献</span></span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(x &lt;= n) &#123;</span><br><span class="line">		Tree[x] += v;</span><br><span class="line">		x += lowbit(x);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">query</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		res += Tree[x];</span><br><span class="line">		x -= lowbit(x);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">coma</span><span class="params">(<span class="keyword">const</span> Node&amp; A, <span class="keyword">const</span> Node&amp; B)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(A.a == B.a) <span class="keyword">return</span> A.b &lt; B.b;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> A.a &lt; B.a;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">comb</span><span class="params">(<span class="keyword">const</span> Node&amp; A, <span class="keyword">const</span> Node&amp; B)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(A.b == B.b) <span class="keyword">return</span> A.c &lt; B.c;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> A.b &lt; B.b;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CDQ</span><span class="params">(<span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(L &gt;= R) <span class="keyword">return</span> ;<span class="comment">// 因处理的是点对  所以 L == R 时也不需要考虑</span></span><br><span class="line">	<span class="keyword">int</span> mid = L + R &gt;&gt; <span class="number">1</span>;</span><br><span class="line">	CDQ(L, mid); CDQ(mid + <span class="number">1</span>, R);</span><br><span class="line">	<span class="comment">//  此时小区间已经算完贡献  开始算  左区间对右区间的贡献</span></span><br><span class="line">	sort(Q + L, Q + mid + <span class="number">1</span>);</span><br><span class="line">	sort(Q + mid + <span class="number">1</span>, Q + R + <span class="number">1</span>);</span><br><span class="line">	<span class="comment">// 暴力排序第二关键字</span></span><br><span class="line">	<span class="keyword">int</span> j = L;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = mid + <span class="number">1</span>; i &lt;= R; ++ i) &#123;</span><br><span class="line">		<span class="keyword">while</span>(j &lt;= mid &amp;&amp; Q[j].b &lt;= Q[i].b) &#123;</span><br><span class="line">			add(Q[j].c, <span class="number">1</span>);</span><br><span class="line">			++ j;</span><br><span class="line">		&#125;</span><br><span class="line">		F[Q[i].id] += query(Q[i].c);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 不要 memset  否则复杂度直接 n ^ 2</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = L; i &lt; j; ++ i) add(Q[i].c, <span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;Q[i].a, &amp;Q[i].b, &amp;Q[i].c);</span><br><span class="line">		Q[i].id = i;</span><br><span class="line">	&#125;</span><br><span class="line">	sort(Q + <span class="number">1</span>, Q + n + <span class="number">1</span>, coma);</span><br><span class="line">	CDQ(<span class="number">1</span>, n);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一个变式<br>例如<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3157">动态逆序对</a></p>
+<p>![](E:\iyua\source_posts\偏序关系-CDQ分治\屏幕截图 2020-12-22 233025.png)</p>
+<p>由题意可知 如果不带修改的话  那就是个裸的二维偏序逆序对问题，但是加入了修改操作，就不好做了，我们考虑三维偏序给每一个修改操作都增加一个时间轴，初始的序列时间轴为1，每次修改操作时间轴依次加一，那么这个题就转成了$ (i, v, t) $ 这样的三元组 求偏序， 因为 对于每次修改， 所减少的逆序对数就是 时间戳小于等于它的，权值大于它且在它前面 和 权值小于它且在它后面 的数的个数  那我们算出每个数的逆序对数， 把初始序列的逆序对都加起来， 再依次减去每个时间轴所影响的逆序对，就是每次的答案</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> de(x)	cerr &lt;&lt; <span class="meta-string">&quot;  debug  &quot;</span> &lt;&lt; #x &lt;&lt; <span class="meta-string">&quot;  ==  &quot;</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span>  LL;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">2e5</span> + <span class="number">7</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">	<span class="comment">// pos tim val</span></span><br><span class="line">	<span class="keyword">int</span> v, pos, tim, val;</span><br><span class="line">&#125;Q[maxn];</span><br><span class="line">LL ans[maxn];</span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compos</span><span class="params">(<span class="keyword">const</span> Node&amp; A, <span class="keyword">const</span> Node&amp; B)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(A.pos == B.pos) &#123;</span><br><span class="line">		<span class="keyword">return</span> A.tim &lt; B.tim;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> A.pos &lt; B.pos;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">comtim</span><span class="params">(<span class="keyword">const</span> Node&amp; A, <span class="keyword">const</span> Node&amp; B)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(A.tim == B.tim) &#123;</span><br><span class="line">		<span class="keyword">return</span> A.val &lt; B.val;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> A.tim &lt; B.tim;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lowbit(x)	(x &amp; (-x))</span></span><br><span class="line">LL Tree[maxn];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> tag)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(x &lt;= n) &#123;</span><br><span class="line">		Tree[x] += tag;</span><br><span class="line">		x += lowbit(x);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> LL <span class="title">query</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">	LL res = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x) &#123;</span><br><span class="line">		res += Tree[x];</span><br><span class="line">		x -= lowbit(x);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> to[maxn];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CDQ</span><span class="params">(<span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(L &gt;= R) <span class="keyword">return</span> ;</span><br><span class="line">	<span class="keyword">int</span> mid = L + R &gt;&gt; <span class="number">1</span>;</span><br><span class="line">	CDQ(L, mid); CDQ(mid + <span class="number">1</span>, R);</span><br><span class="line">	sort(Q + L, Q + mid + <span class="number">1</span>, comtim);</span><br><span class="line">	sort(Q + mid + <span class="number">1</span>, Q + R + <span class="number">1</span>, comtim);</span><br><span class="line">	<span class="keyword">int</span> j = L;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = mid + <span class="number">1</span>; i &lt;= R; ++ i) &#123;</span><br><span class="line">		<span class="keyword">while</span>(j &lt;= mid &amp;&amp; Q[j].tim &lt;= Q[i].tim) &#123;</span><br><span class="line">			add(Q[j].val, Q[j].v);</span><br><span class="line">			++ j;</span><br><span class="line">		&#125;</span><br><span class="line">		ans[Q[i].tim] += query(n) - query(Q[i].val);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = L; i &lt; j; ++ i) add(Q[i].val, - Q[i].v);</span><br><span class="line">	j = mid + <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = L; i &lt;= mid; ++ i) &#123;</span><br><span class="line">		<span class="keyword">if</span>(Q[i].v &gt;= <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="keyword">while</span>(j &lt;= R &amp;&amp; Q[j].tim &lt;= Q[i].tim) &#123;</span><br><span class="line">			add(Q[j].val, Q[j].v);</span><br><span class="line">			++ j;</span><br><span class="line">		&#125;</span><br><span class="line">		ans[Q[i].tim] += query(Q[i].val - <span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = mid + <span class="number">1</span>; i &lt; j; ++ i) &#123;</span><br><span class="line">		add(Q[i].val, -Q[i].v);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;Q[i].val);</span><br><span class="line">		to[Q[i].val] = i;</span><br><span class="line">		Q[i].pos = i;</span><br><span class="line">		Q[i].tim = n;</span><br><span class="line">		Q[i].v = <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = n + <span class="number">1</span>; i &lt;= n + m; ++ i) &#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;Q[i].val);</span><br><span class="line">		Q[i].pos = to[Q[i].val];</span><br><span class="line">		Q[i].v = <span class="number">-1</span>;</span><br><span class="line">		Q[i].tim = i;</span><br><span class="line">	&#125;</span><br><span class="line">	sort(Q + <span class="number">1</span>, Q + n + m + <span class="number">1</span>, compos);</span><br><span class="line">	CDQ(<span class="number">1</span>, n + m);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, ans[n]);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = n + <span class="number">1</span>; i &lt;= n + m - <span class="number">1</span>; ++ i) &#123;</span><br><span class="line">		ans[i] = ans[i - <span class="number">1</span>] - ans[i];</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, ans[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">ifdef</span> iyua</span></span><br><span class="line">		system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">endif</span> </span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再比如一道[牛客题](Why Did the Cow Cross the Road III (P))</p>
+<p>大意  给出两个长度同为 $n$ 的排列， 第一个排列中元素值为 $v$的牛要走到第二个排列中元素值为 $v$ 的位置，一个冲突是指  两头牛的路线会交叉 且俩者的权值之差大于 $k$ 求问会产生多少冲突</p>
+<p>仔细想想就会发现这也是个三维偏序问题，对于一个权值 $v$， 在第一个排列中下标为 $a$，在第二个排列种下标为 $b$，那麽就是一个三元组 $(a, b, v)$， 求问有多少个逆序对， 这里逆序对被定义为 $a_i &lt; a_j$, $b_i &gt; b_j$，且 $abs(v_i - v_j)$ &gt; $k$</p>
+<p>那就直接上  $CDQ$ 分治咯</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> de(x)    cerr &lt;&lt; <span class="meta-string">&quot;   debug  &quot;</span> &lt;&lt; #x &lt;&lt; <span class="meta-string">&quot;  ==  &quot;</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span>  LL;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">7</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> a, b, c;</span><br><span class="line">&#125;Q[maxn];</span><br><span class="line"><span class="keyword">int</span> to[maxn];</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">coma</span><span class="params">(<span class="keyword">const</span> Node&amp; A, <span class="keyword">const</span> Node&amp; B)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(A.a == B.a) &#123;</span><br><span class="line">        <span class="keyword">return</span> A.b &lt; B.b;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">return</span> A.a &lt; B.a;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">comb</span><span class="params">(<span class="keyword">const</span> Node&amp; A, <span class="keyword">const</span> Node&amp; B)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(A.b == B.b) &#123;</span><br><span class="line">        <span class="keyword">return</span> A.c &lt; B.c;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> A.b &gt; B.b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n, K;</span><br><span class="line">LL res = <span class="number">0</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lowbit(x)    (x &amp; (-x))</span></span><br><span class="line">LL Tree[maxn];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(x &lt;= n) &#123;</span><br><span class="line">        Tree[x] += v;</span><br><span class="line">        x += lowbit(x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> LL <span class="title">query</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    LL res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x) &#123;</span><br><span class="line">        res += Tree[x];</span><br><span class="line">        x -= lowbit(x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CDQ</span><span class="params">(<span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(L &gt;= R) <span class="keyword">return</span> ;</span><br><span class="line">    <span class="keyword">int</span> mid = L + R &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    CDQ(L, mid); CDQ(mid + <span class="number">1</span>, R);</span><br><span class="line">    sort(Q + L, Q + mid + <span class="number">1</span>, comb);</span><br><span class="line">    sort(Q + mid + <span class="number">1</span>, Q + R + <span class="number">1</span>, comb);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> j = L;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = mid + <span class="number">1</span>; i &lt;= R; ++ i) &#123;</span><br><span class="line">        <span class="keyword">while</span>(j &lt;= mid &amp;&amp; Q[j].b &gt;= Q[i].b) &#123;</span><br><span class="line">            add(Q[j].c, <span class="number">1</span>);</span><br><span class="line">            ++ j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(Q[i].c + K + <span class="number">1</span> &lt;= n) &#123;</span><br><span class="line">            res += query(n) - query(Q[i].c + K);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(Q[i].c - K - <span class="number">1</span> &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">            res += query(Q[i].c - K - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = L; i &lt; j; ++ i) add(Q[i].c, <span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;n, &amp;K);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">int</span> x; <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;x);</span><br><span class="line">        to[x] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">int</span> x; <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;x);</span><br><span class="line">        Q[i].a = i;</span><br><span class="line">        Q[i].b = to[x];</span><br><span class="line">        Q[i].c = x;</span><br><span class="line">    &#125;</span><br><span class="line">    sort(Q + <span class="number">1</span>, Q + n + <span class="number">1</span>, coma);</span><br><span class="line">    CDQ(<span class="number">1</span>, n);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, res);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P4169">CDQ分治毒瘤题</a></p>
+<p>这题 $debug$ 直接 $de$ 到脑溢血了</p>
+<p>考虑最近点位于它的左下方，那么 $|a_x - b_x| + |a_y - b_y|$ 可以化为 $(a_x + a_y) - (b_x + b_y)$ , 同时给每个点编上时间戳，那么就是(x, y, t)这个三元组 满足 $x_i &lt;= x_j, y_i &lt;= y_j, t_i &lt;= t_j$ 的最大的 $x_j + y_j$ ，就是最小距离， 考虑旋转四次90°使得每个方向都会被考虑到，同时剪枝剪掉不在此范围的，且整体偏移一格去消0的影响（不好用树状数组维护0)</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> de(x)	cerr &lt;&lt; <span class="meta-string">&quot;   debug  &quot;</span> &lt;&lt; #x &lt;&lt; <span class="meta-string">&quot;  ==  &quot;</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lowbit(x)	(x &amp; (-x))</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span>  LL;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">2e6</span> + <span class="number">207</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> x, y, op, tim;</span><br><span class="line">&#125; Q[maxn], A[maxn];</span><br><span class="line"><span class="keyword">int</span> mxx, mxy;</span><br><span class="line"><span class="keyword">int</span> ans[maxn], n, m;</span><br><span class="line"><span class="keyword">int</span> Tree[maxn];</span><br><span class="line"><span class="keyword">int</span> top, rx, ry;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">comx</span><span class="params">(<span class="keyword">const</span> Node&amp; A, <span class="keyword">const</span> Node&amp; B)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(A.x == B.x) &#123;</span><br><span class="line">		<span class="keyword">return</span> A.tim &lt; B.tim;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> A.x &lt; B.x;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">comtim</span><span class="params">(<span class="keyword">const</span> Node&amp; A, <span class="keyword">const</span> Node&amp; B)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(A.tim == B.tim) &#123;</span><br><span class="line">		<span class="keyword">return</span> A.y &lt; B.y;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> A.tim &lt; B.tim;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// void clear() &#123;</span></span><br><span class="line"><span class="comment">// 	top = 0;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(x &lt;= mxy) &#123;</span><br><span class="line">		Tree[x] = max(Tree[x], v);</span><br><span class="line">		x += lowbit(x);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">del</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(x &lt;= mxy) &#123;</span><br><span class="line">		<span class="keyword">if</span>(!Tree[x]) <span class="keyword">return</span> ;</span><br><span class="line">		Tree[x] = <span class="number">0</span>;</span><br><span class="line">		x += lowbit(x);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">query</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(x) &#123;</span><br><span class="line">		res = max(res, Tree[x]);</span><br><span class="line">		x -= lowbit(x);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	top = <span class="number">0</span>;</span><br><span class="line">	rx = <span class="number">0</span>, ry = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n + m; ++ i) &#123;</span><br><span class="line">		<span class="keyword">if</span>(Q[i].op % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">			rx = max(rx, Q[i].x);</span><br><span class="line">			ry = max(ry, Q[i].y);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n + m; ++ i) &#123;</span><br><span class="line">		<span class="keyword">if</span>(Q[i].x &lt;= rx &amp;&amp; Q[i].y &lt;= ry) &#123;</span><br><span class="line">			Q[++ top] = Q[i];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	sort(Q + <span class="number">1</span>, Q + top + <span class="number">1</span>, comx);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CDQ</span><span class="params">(<span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(L &gt;= R) <span class="keyword">return</span> ;</span><br><span class="line">	<span class="keyword">int</span> mid = L + R &gt;&gt; <span class="number">1</span>;</span><br><span class="line">	CDQ(L, mid); CDQ(mid + <span class="number">1</span>, R);</span><br><span class="line">	sort(Q + L, Q + mid + <span class="number">1</span>, comtim);</span><br><span class="line">	sort(Q + mid + <span class="number">1</span>, Q + R + <span class="number">1</span>, comtim);</span><br><span class="line">	<span class="keyword">int</span> j = L;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = mid + <span class="number">1</span>; i &lt;= R; ++ i) &#123;</span><br><span class="line">		<span class="keyword">if</span>(Q[i].op &amp; <span class="number">1</span>) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="keyword">while</span>(j &lt;= mid &amp;&amp; Q[j].tim &lt;= Q[i].tim) &#123;</span><br><span class="line">			<span class="keyword">if</span>(Q[j].op &amp; <span class="number">1</span>)</span><br><span class="line">			add(Q[j].y, Q[j].x + Q[j].y);</span><br><span class="line">			++ j;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> tmp = query(Q[i].y);</span><br><span class="line">		<span class="keyword">if</span>(tmp)</span><br><span class="line">			ans[Q[i].tim] = min(ans[Q[i].tim], Q[i].x + Q[i].y - tmp);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = L; i &lt; j; ++ i) &#123;</span><br><span class="line">		<span class="keyword">if</span>(Q[i].op &amp; <span class="number">1</span>)</span><br><span class="line">		del(Q[i].y);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">	mxx = <span class="number">0</span>, mxy = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">		<span class="keyword">int</span> x, y;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;x, &amp;y);</span><br><span class="line">		++ x, ++ y;</span><br><span class="line">		Q[i] = (Node) &#123;x, y, <span class="number">1</span>, i&#125;;</span><br><span class="line">		mxx = max(mxx, x), mxy = max(mxy, y);</span><br><span class="line">		A[i] = Q[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = n + <span class="number">1</span>; i &lt;= n + m; ++ i) &#123;</span><br><span class="line">		<span class="keyword">int</span> k, x, y;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;k, &amp;x, &amp;y);</span><br><span class="line">		++ x, ++ y;</span><br><span class="line">		mxx = max(mxx, x), mxy = max(mxy, y);</span><br><span class="line">		<span class="keyword">if</span>(k &amp; <span class="number">1</span>) &#123;</span><br><span class="line">			Q[i] = (Node) &#123;x, y, <span class="number">1</span>, i&#125;;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			Q[i] = (Node) &#123;x, y, <span class="number">2</span>, i&#125;;</span><br><span class="line">		&#125;</span><br><span class="line">		A[i] = Q[i];</span><br><span class="line">	&#125;</span><br><span class="line">	++ mxx, ++ mxy;</span><br><span class="line">	<span class="built_in">memset</span>(ans, <span class="number">0x3f3f3f3f</span>, <span class="keyword">sizeof</span>(ans));</span><br><span class="line"></span><br><span class="line">	<span class="comment">//1</span></span><br><span class="line">	build();</span><br><span class="line">	CDQ(<span class="number">1</span>, top);</span><br><span class="line">	<span class="comment">//2</span></span><br><span class="line">	<span class="comment">// clear();</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n + m; ++ i) &#123;</span><br><span class="line">		Q[i] = A[i];</span><br><span class="line">		Q[i].x = mxx - Q[i].x;</span><br><span class="line">	&#125;</span><br><span class="line">	build();</span><br><span class="line">	CDQ(<span class="number">1</span>, top);</span><br><span class="line">	<span class="comment">//3</span></span><br><span class="line">	<span class="comment">// clear();</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n + m; ++ i) &#123;</span><br><span class="line">		Q[i] = A[i];</span><br><span class="line">		Q[i].y = mxy - Q[i].y;</span><br><span class="line">	&#125;</span><br><span class="line">	build();</span><br><span class="line">	CDQ(<span class="number">1</span>, top);</span><br><span class="line">	<span class="comment">//4</span></span><br><span class="line">	<span class="comment">// clear();</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n + m; ++ i) &#123;</span><br><span class="line">		Q[i] = A[i];</span><br><span class="line">		Q[i].x = mxx - Q[i].x;</span><br><span class="line">		Q[i].y = mxy - Q[i].y;</span><br><span class="line">	&#125;</span><br><span class="line">	build();</span><br><span class="line">	CDQ(<span class="number">1</span>, top);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = n + <span class="number">1</span>; i &lt;= n + m; ++ i) &#123;</span><br><span class="line">		<span class="keyword">if</span>(A[i].op % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">ifdef</span> iyua</span></span><br><span class="line">		system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">endif</span> </span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h6 id="四维偏序"><a href="#四维偏序" class="headerlink" title="四维偏序"></a>四维偏序</h6><p> CDQ 套  CDQ<br>有两种写法，一种是归并排序，标记 $flag$ 判断在第一维时的左右区间， 另一种是直接 $sort$ 多传一个参数，来限制套用的 $CDQ$ 时计算的贡献<br>第一种写法常数会小一些<br>给出一个<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44290978/article/details/107243237?utm_medium=distribute.pc_relevant.none-task-blog-OPENSEARCH-11.not_use_machine_learn_pai&depth_1-utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-11.not_use_machine_learn_pai">博客</a><br>里面两种写法都有提及</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="">偏序关系 &amp; CDQ分治</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
+        <p><span>发布时间:</span>2020年12月26日 - 00时04分</p>
+        <p><span>最后更新:</span>2021年01月21日 - 17时13分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="" title="偏序关系 &amp; CDQ分治">http://example.com/2020/12/26/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB-CDQ%E5%88%86%E6%B2%BB/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2020/12/26/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB-CDQ%E5%88%86%E6%B2%BB/　　作者: " title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a  href="../%E7%BA%BF%E6%AE%B5%E6%A0%91-%E5%88%86%E5%9D%97/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          线段树 &amp; 分块
+        
+      </div>
+    </a>
+  
+  
+    <a  href="../%E7%AE%80%E5%8D%95%E5%8D%9A%E5%BC%88/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">简单博弈</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E5%81%8F%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">二维偏序</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%89%E7%BB%B4%E5%81%8F%E5%BA%8F"><span class="toc-number">2.</span> <span class="toc-text">三维偏序</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9B%9B%E7%BB%B4%E5%81%8F%E5%BA%8F"><span class="toc-number">3.</span> <span class="toc-text">四维偏序</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+        <section class="changyan" id="comments">
+  <!--<div id="uyan_frame"></div>-->
+  <div id="SOHUCS"></div>
+  <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js"></script>
+  <script type="text/javascript">
+    window.changyan.api.config({
+      appid: 'xxxx',
+      conf: 'xxxxxxxxx'
+    });
+  </script>
+</section>
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="../%E7%BA%BF%E6%AE%B5%E6%A0%91-%E5%88%86%E5%9D%97/" title="上一篇: 线段树 &amp; 分块">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="../%E7%AE%80%E5%8D%95%E5%8D%9A%E5%BC%88/" title="下一篇: 简单博弈">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="../../../../2021/03/07/prufer%E5%BA%8F%E5%88%97/">prufer序列</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/03/01/%E7%89%9B%E5%AE%A2%E7%BB%83%E4%B9%A0%E8%B5%9B77/">牛客练习赛77</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/27/CF-EDU63-div2-D/">CF EDU63 div2 D</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/25/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/">AC自动机</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/21/%E4%BA%8C%E5%88%86%E5%9B%BE%E4%B8%8E%E5%8C%B9%E9%85%8D/">二分图与匹配</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%9D%82%E9%A2%98/">数据结构杂题</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/19/2-SAT/">2-SAT</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/19/%E6%94%AF%E9%85%8D%E6%A0%91/">支配树</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/17/%E5%89%B2%E7%82%B9-%E6%A1%A5-%E5%8F%8C%E8%BF%9E%E9%80%9A/">割点,桥,双连通</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/16/%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95/">矩阵乘法</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/13/%E8%B7%AF%E5%BE%84/">路径</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/13/%E5%AF%B9%E5%81%B6%E5%9B%BE%E5%A4%84%E7%90%86%E5%B9%B6%E6%9F%A5%E9%9B%86/">对偶图处理并查集</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/13/DAG%E5%9B%BE%E4%B8%8E%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">DAG图与拓扑排序</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/13/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F/">差分约束</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/11/%E6%A0%91%E7%9A%84%E7%9B%B4%E5%BE%84%E4%B8%8E%E9%87%8D%E5%BF%83/">树的直径与重心</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/07/LCT/">LCT</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/03/splay%E5%85%A5%E9%97%A8%E4%BE%8B%E9%A2%98/">splay入门例题</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/02/01/01%E5%BA%8F%E5%88%97%E5%A4%84%E7%90%86sort-%E7%BA%BF%E6%AE%B5%E6%A0%91/">01序列处理sort(线段树)</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/29/%E7%BA%BF%E6%AE%B5%E6%A0%91%E5%90%88%E5%B9%B6%E4%B8%8E%E5%88%86%E8%A3%82/">线段树合并与分裂</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/26/%E7%BA%BF%E6%AE%B5%E6%A0%91%E5%8A%A8%E6%80%81%E5%BC%80%E7%82%B9-%E7%A6%BB%E6%95%A3%E5%8C%96/">线段树动态开点 & 离散化</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/25/%E5%B7%A6%E5%81%8F%E6%A0%91/">左偏树</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/25/%E5%AF%B9%E9%A1%B6%E5%A0%86/">对顶堆</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/24/E-Gerald-and-Giant-Chess/">E. Gerald and Giant Chess</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/22/%E5%88%92%E5%88%86%E6%A0%91/">划分树</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/21/%E6%B4%9B%E8%B0%B7P42699/">洛谷P4269(线段树维护区间合并)</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/21/%E6%95%B4%E4%BD%93%E4%BA%8C%E5%88%86/">整体二分</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/20/%E8%8E%AB%E9%98%9F/">莫队</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/19/dsu-on-tree/">dsu on tree</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/17/%E7%8F%82%E6%9C%B5%E8%8E%89%E6%A0%91/">珂朵莉树</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/17/%E7%BA%BF%E6%80%A7%E5%9F%BA/">线性基</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/15/2019%E7%89%9B%E5%AE%A2%E5%9B%BD%E5%BA%86day3-E-Grid/">2019牛客国庆day3-E-Grid</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/15/Codeforces-Round-674-Div-3/">Codeforces Round 674 Div. 3</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/13/Segment-Tree-Beats/">Segment Tree Beats</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/12/%E5%B9%B6%E6%9F%A5%E9%9B%86%E5%85%A8%E5%AE%B6%E6%A1%B6/">并查集全家桶</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/10/%E7%89%9B%E5%AE%A2%E6%8C%91%E6%88%98%E8%B5%9B47/">牛客挑战赛47</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/05/Codeforces-Round-693-Div-3/">Codeforces Round 693 Div 3</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/04/%E4%B8%BB%E5%B8%AD%E6%A0%91%E5%85%A5%E9%97%A8%E4%BE%8B%E9%A2%98/">主席树入门例题</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/04/kruskal%E9%87%8D%E6%9E%84%E6%A0%91/">kruskal重构树</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/03/%E5%9F%BA%E7%8E%AF%E6%A0%91/">基环树</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/02/%E7%94%9F%E6%88%90%E6%A0%91%E4%B8%93%E9%A2%98/">生成树专题</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/02/%E5%BC%82%E6%88%96%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">异或问题总结</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/01/02/%E7%89%9B%E5%AE%A2%E5%81%87%E6%97%A5%E5%9B%A2%E9%98%9F%E8%B5%9B64/">牛客假日团队赛64</a></li><li class="post-list-item"><a class="post-list-link" href="../../30/Team-traning/">Team traning</a></li><li class="post-list-item"><a class="post-list-link" href="../../30/2019%E7%89%9B%E5%AE%A2%E5%9B%BD%E5%BA%86%E9%9B%86%E8%AE%AD%E6%B4%BE%E5%AF%B9day2/">2019牛客国庆集训派对day2</a></li><li class="post-list-item"><a class="post-list-link" href="../../29/%E7%89%9B%E5%AE%A2IOI%E5%91%A8%E8%B5%9B21-%E6%99%AE%E5%8F%8A%E7%BB%84/">牛客IOI周赛21-普及组</a></li><li class="post-list-item"><a class="post-list-link" href="../../28/High-Card-Low-Card-%E8%B4%AA%E5%BF%83/">High Card Low Card(贪心))</a></li><li class="post-list-item"><a class="post-list-link" href="../%E5%AD%90%E6%AE%B5%E5%92%8C/">子段和</a></li><li class="post-list-item"><a class="post-list-link" href="../%E7%BA%BF%E6%AE%B5%E6%A0%91-%E5%88%86%E5%9D%97/">线段树 & 分块</a></li><li class="post-list-item"><a class="post-list-link" href="">偏序关系 & CDQ分治</a></li><li class="post-list-item"><a class="post-list-link" href="../%E7%AE%80%E5%8D%95%E5%8D%9A%E5%BC%88/">简单博弈</a></li><li class="post-list-item"><a class="post-list-link" href="../%E6%9D%BF%E5%88%B7codeforces%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">板刷codeforces数据结构</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2021 iyua
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a><a href="https://github.com/maochunguang" target="_blank">Blog</a> by tommy
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >极客到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+
+<script src="../../../../js/main.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'xxxxx', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>
